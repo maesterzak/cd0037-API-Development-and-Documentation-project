@@ -105,7 +105,7 @@ Errors returned are json objects in the format shown below.
 The Api will return three (4) error types when requests fail:
 
 - 400: Bad Request,
-- 404: Request Not Found,
+- 404: Resource(s) Not Found,
 - 422: Not Processable,
 - 500: Internal Server Error
 
