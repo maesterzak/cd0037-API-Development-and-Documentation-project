@@ -318,7 +318,7 @@ The Api will return three (3) error types when requests fail:
     
 - **Sample request**
   ``` bash
-    curl -X POST -H "Content-Type":"application/json" -d '{"searchTerm":"with"}' http://127.0.0.1:5000/questions/search
+    curl -X POST -H "Content-Type":"application/json" -d '{"searchTerm":"which"}' http://127.0.0.1:5000/questions/search
   ```
 
 - **Sample response**
