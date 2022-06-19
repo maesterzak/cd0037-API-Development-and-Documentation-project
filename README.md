@@ -59,23 +59,15 @@ Setting the FLASK_APP variable to flaskr directs flask to use the flaskr directo
 
 ##### Tests
 
-Change the value of database_name in backend/models.py to trivia_test
-
-Then in terminal execute:
+In terminal execute:
 
 ```bash
 dropdb trivia_test
 createdb trivia_test
 psql trivia_test < trivia.psql
-```
-
-Next run your flask app with flask run
-
-Then to run tests, execute:
-
-``` bash
 python test_flaskr.py
 ```
+
 #### Frontend 
 
 From the frontend folder, run the following commands to start the client:
