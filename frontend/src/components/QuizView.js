@@ -4,6 +4,8 @@ import '../stylesheets/QuizView.css';
 
 const questionsPerPlay = 5;
 
+
+
 class QuizView extends Component {
   constructor(props) {
     super();
@@ -16,6 +18,8 @@ class QuizView extends Component {
       currentQuestion: {},
       guess: '',
       forceEnd: false,
+      totalQuestions:0,
+      currentQuestionNum:0
     };
   }
 
@@ -34,7 +38,7 @@ class QuizView extends Component {
     });
   }
 
-  selectCategory = ({ type, id = 0 }) => {
+  selectCategory = ({ type = 'All', id = 0 }) => {
     this.setState({ quizCategory: { type, id } }, this.getNextQuestion);
   };
 
@@ -68,6 +72,8 @@ class QuizView extends Component {
           currentQuestion: result.question,
           guess: '',
           forceEnd: result.question ? false : true,
+          totalQuestions:result.totalQuestions,
+          currentQuestionNum: this.state.currentQuestionNum + 1
         });
         return;
       },
@@ -96,6 +102,9 @@ class QuizView extends Component {
       currentQuestion: {},
       guess: '',
       forceEnd: false,
+      totalQuestions:0,
+      currentQuestionNum:0
+
     });
   };
 
@@ -177,6 +186,7 @@ class QuizView extends Component {
       this.renderCorrectAnswer()
     ) : (
       <div className='quiz-play-holder'>
+        <div>Question: {this.state.currentQuestionNum}/{this.state.totalQuestions > questionsPerPlay ? questionsPerPlay:this.state.totalQuestions}</div>
         <div className='quiz-question'>
           {this.state.currentQuestion.question}
         </div>

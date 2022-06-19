@@ -30,31 +30,44 @@ class FormView extends Component {
   }
 
   submitQuestion = (event) => {
+    
     event.preventDefault();
-    $.ajax({
-      url: '/questions', //TODO: update request URL
-      type: 'POST',
-      dataType: 'json',
-      contentType: 'application/json',
-      data: JSON.stringify({
-        question: this.state.question,
-        answer: this.state.answer,
-        difficulty: this.state.difficulty,
-        category: this.state.category,
-      }),
-      xhrFields: {
-        withCredentials: true,
-      },
-      crossDomain: true,
-      success: (result) => {
-        document.getElementById('add-question-form').reset();
-        return;
-      },
-      error: (error) => {
-        alert('Unable to add question. Please try your request again');
-        return;
-      },
-    });
+    if (window.confirm('are you sure you want to add this question?')) {
+      $.ajax({
+        url: '/questions', //TODO: update request URL
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          question: this.state.question,
+          answer: this.state.answer,
+          difficulty: this.state.difficulty,
+          category: this.state.category,
+        }),
+        xhrFields: {
+          withCredentials: true,
+        },
+        crossDomain: true,
+        success: (result) => {
+          document.getElementById('add-question-form').reset();
+          alert('Question '+ result["created"] + ' added successfully');
+          //resettiing state to default
+          this.setState({
+            question: '',
+            answer: '',
+            difficulty: 1,
+            category: 1,
+            
+          });
+
+          return;
+        },
+        error: (error) => {
+          alert('Unable to add question. Please try your request again');
+          return;
+        },
+      });
+    }
   };
 
   handleChange = (event) => {
@@ -92,6 +105,7 @@ class FormView extends Component {
             Category
             <select name='category' onChange={this.handleChange}>
               {Object.keys(this.state.categories).map((id) => {
+                
                 return (
                   <option key={id} value={id}>
                     {this.state.categories[id]}

@@ -13,6 +13,8 @@ class QuestionView extends Component {
       totalQuestions: 0,
       categories: {},
       currentCategory: null,
+      event:'all questions',
+      eventValue:null
     };
   }
 
@@ -40,8 +42,19 @@ class QuestionView extends Component {
     });
   };
 
+  currentEvent(){
+    if(this.state.event === 'all questions'){
+      this.getQuestions()
+    }
+    else if (this.state.event === 'questions by category'){
+      this.getByCategory(this.state.eventValue)
+    }
+    else if (this.state.event === 'questions by search term'){
+      this.submitSearch(this.state.eventValue)
+    }
+  }
   selectPage(num) {
-    this.setState({ page: num }, () => this.getQuestions());
+    this.setState({ page: num }, () => this.currentEvent());
   }
 
   createPagination() {
@@ -62,16 +75,19 @@ class QuestionView extends Component {
     }
     return pageNumbers;
   }
-
+  
   getByCategory = (id) => {
+    
     $.ajax({
-      url: `/categories/${id}/questions`, //TODO: update request URL
+      url: `/categories/${id}/questions?page=${this.state.page}`, //TODO: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({
           questions: result.questions,
           totalQuestions: result.total_questions,
           currentCategory: result.current_category,
+          event:'questions by category',
+          eventValue:id
         });
         return;
       },
@@ -79,12 +95,15 @@ class QuestionView extends Component {
         alert('Unable to load questions. Please try your request again');
         return;
       },
+
+      
+
     });
   };
 
   submitSearch = (searchTerm) => {
     $.ajax({
-      url: `/questions`, //TODO: update request URL
+      url: `/questions/search?page=${this.state.page}`, //TODO: update request URL
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
@@ -98,6 +117,8 @@ class QuestionView extends Component {
           questions: result.questions,
           totalQuestions: result.total_questions,
           currentCategory: result.current_category,
+          event:'questions by search term',
+          eventValue:searchTerm
         });
         return;
       },
@@ -115,7 +136,7 @@ class QuestionView extends Component {
           url: `/questions/${id}`, //TODO: update request URL
           type: 'DELETE',
           success: (result) => {
-            this.getQuestions();
+            this.currentEvent();
           },
           error: (error) => {
             alert('Unable to load questions. Please try your request again');
@@ -125,8 +146,14 @@ class QuestionView extends Component {
       }
     }
   };
+  getByCategoryHandler(id) {
+    
+    this.setState({ page: 1 }, () => this.getByCategory(id));
 
-  render() {
+  }
+  
+  render()
+   {
     return (
       <div className='question-view'>
         <div className='categories-list'>
@@ -140,10 +167,12 @@ class QuestionView extends Component {
           <ul>
             {Object.keys(this.state.categories).map((id) => (
               <li
+                className={this.state.currentCategory !=null? this.state.categories[id]=== this.state.currentCategory['type'] ? 'active':'' :''}
+                
                 key={id}
                 onClick={() => {
-                  this.getByCategory(id);
-                }}
+                  this.getByCategoryHandler(id) }
+                }
               >
                 {this.state.categories[id]}
                 <img
@@ -157,6 +186,7 @@ class QuestionView extends Component {
           <Search submitSearch={this.submitSearch} />
         </div>
         <div className='questions-list'>
+          <div className='event-tag'><span className='current-event'>Viewing {this.state.event}</span></div>
           <h2>Questions</h2>
           {this.state.questions.map((q, ind) => (
             <Question

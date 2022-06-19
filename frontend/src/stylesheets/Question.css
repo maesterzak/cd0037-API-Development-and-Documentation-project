@@ -73,3 +73,19 @@ img.category {
 img.delete {
   width: 20px;
 }
+.active{
+  color: blue;
+}
+.event-tag{
+  
+  width: 100%;
+  margin-top: 10px;
+  text-align: end;
+  
+}
+.current-event{
+  background-color: #222;
+  color: white;
+  padding: 15px;
+ 
+}
