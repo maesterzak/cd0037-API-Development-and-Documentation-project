@@ -102,7 +102,7 @@ Errors returned are json objects in the format shown below.
 }
 ```
 
-The Api will return three (3) error types when requests fail:
+The Api will return three (4) error types when requests fail:
 
 - 400: Bad Request,
 - 404: Request Not Found,
